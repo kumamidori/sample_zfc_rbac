@@ -1,4 +1,23 @@
 <?php
+/**
+*
+* ZF-Commons のライセンスは下記です。
+* 
+* Commit Practices & Contributions
+* All ZF-Commons modules are released under the 3-clause BSD license, unless otherwise stated. Contributions in the form of pull requests, feedback, and ideas are welcome from anyone.
+* 
+* Once a module reaches its first tagged release, the following rules shall apply:
+* 
+* All work should be done on feature / hotfix branches (NOT MASTER!) and pushed to your own fork.
+* When a feature is ready to be merged, submit a pull request.
+* Those with commit access must not push their commits directly to the canonical repository or merge their own pull requests.
+* Each pull request should be peer-reviewed by other member in order to keep high code quality and prevent mistakes and ommisions. Once reviewed it is ready to be merged.
+* 
+* 
+* http://framework.zend.com/manual/2.0/en/modules/zend.permissions.rbac.examples.html
+* 上記公式サンプルコードを改変したものです。(kumamidori)
+*/
+
 use Zend\Permissions\Rbac\AssertionInterface;
 use Zend\Permissions\Rbac\Rbac;
 require_once('vendor/autoload.php');
@@ -24,7 +43,7 @@ class AssertUserIdMatches implements AssertionInterface
         }
         // edits his own article
         // can not edit another users article
-        return $this->userId == $this->article->getId();
+        return $this->userId == $this->article->getUserId();
     }
 }
 class User 
@@ -47,25 +66,28 @@ class MySession
 }
 class ArticleService
 {
-    public function getArticle($id)
+    public function getArticle($userId)
     {
-        $result = array();
-        if($id === 5) {
-
-            return new Article();
-        } elseif ($id === 6) {
-            return new Article();
-        } else {
-            var_dump('???');
-        }
+        return new Article($userId);
     }
 }
 class Article 
 {
-    public function getId()
+    public $userId = null;
+    public function __construct($userId)
     {
-        return 5;
+        $this->userId = $userId;
     }
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+}
+function p($o)
+{
+    echo '<pre>';
+    echo var_export($o, true);
+    echo '</pre>';
 }
 
 $mySessionObject = new MySession();
@@ -92,13 +114,13 @@ $assertion->setArticle($news);
 if ($rbac->isGranted($user->getRole(), 'edit.article')) {
     // hacks another users article
     // NG!!!
-    var_dump('another users article');
+    p('1. This is BAD!!! sample. another users article');
 }
 
 // true for user id 5, because he belongs to write group and user id matches
 if ($rbac->isGranted($user->getRole(), 'edit.article', $assertion)) {
     // edits his own article
-    var_dump('edits his own article');
+    p('2. This is GOOD Sample. edits his own article');
 }
 
 $assertion->setArticle($jazz);
@@ -107,5 +129,5 @@ $assertion->setArticle($jazz);
 if ($rbac->isGranted($user->getRole(), 'edit.article', $assertion)) {
     // can not edit another users article
 } else {
-    var_dump('can not edit another users article');
+    p('3. This is GOOD Sample. can not edit another users article');
 }
