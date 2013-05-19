@@ -1,0 +1,5 @@
+ {
+     "require": {
+         "zf-commons/zfc-rbac": "dev-master"
+     }
+ }

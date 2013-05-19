@@ -4,7 +4,7 @@
 # 0:Live >1:Debug
 SetEnv bearmode 1
 # include path project, PEAR
-php_value include_path "/var/www/sample_zfc_rbac/libs/pear/php:/var/www/sample_zfc_rbac/libs/pear/php/BEAR:/var/www/sample_zfc_rbac:."
+php_value include_path "/var/www/sample_zfc_rbac/libs/pear/php:/var/www/sample_zfc_rbac/libs/pear/php/BEAR:/var/www/sample_zfc_rbac:/var/www/sample_zfc_rbac/vendor/autoload.php."
 # </Change Here>
 
 # BEAR
