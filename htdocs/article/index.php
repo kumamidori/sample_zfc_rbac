@@ -26,9 +26,20 @@ require_once 'App.php';
  */
 class Page_Article_Index extends App_Page
 {
+    public function onInit()
+    {
+        phpinfo();
+        $params = array(
+            'uri' => 'Article/List'
+        );
+        $articles = $this->_resource->read($params)->getBody();
+        $this->set('articles', $articles);
+    }
+
     public function onOutput()
     {
         $this->display('index.tpl');
     }
 }
+
 App_Main::run('Page_Article_Index');

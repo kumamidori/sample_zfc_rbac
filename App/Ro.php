@@ -25,13 +25,6 @@
 class App_Ro extends BEAR_Ro
 {
     /**
-     * テーブル
-     *
-     * @var string
-     */
-    const TABLE_USER = 'users';
-
-    /**
      * DAO
      *
      * @var BEAR_MDB2
@@ -81,6 +74,7 @@ class App_Ro extends BEAR_Ro
                 'table' => $this->_table
             );
         }
+        $this->_query = BEAR::dependency('BEAR_Query', $this->_queryConfig, false);
     }
 
     /**
