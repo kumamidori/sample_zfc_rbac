@@ -28,7 +28,6 @@ class Page_Article_Index extends App_Page
 {
     public function onInit()
     {
-        phpinfo();
         $params = array(
             'uri' => 'Article/List'
         );
