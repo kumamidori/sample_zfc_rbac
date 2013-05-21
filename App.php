@@ -10,11 +10,16 @@
  * @link     http://@link_url@
  */
 
+require_once('vendor/autoload.php');
+
+
 /**
  * App root path
  */
 define('_BEAR_APP_HOME', realpath(dirname(__FILE__)));
 require_once 'BEAR.php';
+
+
 
 $bearMode = isset($_SERVER['bearmode']) ? $_SERVER['bearmode'] : 0;
 // profile
