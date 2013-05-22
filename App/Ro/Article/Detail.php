@@ -1,41 +1,8 @@
 <?php
-use Zend\Permissions\Rbac\AssertionInterface;
-use Zend\Permissions\Rbac\Rbac;
 /**
  * 記事詳細Ro
  *
  */
-class AssertCompanyIdMatches implements AssertionInterface
-{
-    public $userCompanyId;
-    public $article;
-
-    public function __construct()
-    {
-        $session = BEAR::dependency('BEAR_Session');
-        $curUserId = $session->get('current_user_id');
-        // TODO: 検索して取得する。とりあえず固定。
-        $this->userCompanyId = null;
-    }
-
-    public function setArticle($article)
-    {
-        $this->article = $article;
-    }
-
-    public function assert(Rbac $rbac)
-    {
-        if (!$this->article) {
-            return false;
-        }
-        // edits his company's article
-        // publish status [preview] only
-        // can not edit another company's article
-
-        return $this->userCompanyId == $this->article['company_id'];
-    }
-}
-
 /**
  * 記事詳細Ro
  *
@@ -66,11 +33,10 @@ class App_Ro_Article_Detail extends App_Ro
      */
     public function onCreate($values)
     {
-        // TODO: 設定済みの状態で取得する
-        $rbac = new Rbac();
-        $rbac->addRole('admin');
-        $rbac->getRole('admin')->addPermission('edit.article');
-        $assertion = new AssertCompanyIdMatches();
+        $appRbac = BEAR::dependency('App_Rbac');
+        $rbac = $appRbac->rbac;
+
+        $assertion = BEAR::dependency('App_Rbac_AssertCompanyIdMatches');
         $assertion->setArticle($values);
 
         $roleCode = $values['current_user_role_code'];
@@ -78,8 +44,10 @@ class App_Ro_Article_Detail extends App_Ro
         unset($values['current_user_role_code']);
         if ($rbac->isGranted($roleCode, 'edit.article', $assertion)) {
             $publishStatus = 1;
-        } else {
+        } else if($rbac->isGranted($roleCode, 'preview.manage.article', $assertion)) {
             $publishStatus = 0;
+        } else {
+            throw new Exception('予期しないエラーが発生しました');
         }
         $values['publish_status'] = $publishStatus;
 

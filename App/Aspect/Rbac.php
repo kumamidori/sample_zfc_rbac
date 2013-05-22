@@ -27,8 +27,8 @@ class App_Aspect_Rbac implements BEAR_Aspect_Before_Interface
             // TODO: 例外を投げる
             // throw new RbacRoleNotFoundException();
             // とりあえずダミーで固定
-            $userId = 1;
-            $roleCode = 'admin';
+            $userId = 3;
+            $roleCode = 'writer';
         }
         $values['current_user_id'] = $userId;
         $values['current_user_role_code'] = $roleCode;

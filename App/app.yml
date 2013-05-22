@@ -42,7 +42,7 @@ BEAR_Form:
   method: 'post'
   # アトリビュート
   attributes: null
-  
+
 BEAR_Page_Ajax:
   # double submit cookieチェック
   security_check: false

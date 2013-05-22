@@ -1,3 +1,4 @@
+<div><a href="/">/HOME/</a></div>
 <div><a href="/article/">記事一覧へ戻る</a></div>
 
 <div>■記事作成</div>
